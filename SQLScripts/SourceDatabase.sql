@@ -28,7 +28,8 @@ RecordId int not null identity(1,1) primary key,
 DisplayName varchar(50) not null check(len(DisplayName) > 0),
 SortOrder int not null unique,
 ReferenceId int null references dbo.ReferenceTable(ReferenceId),
-ModifiedDate datetime not null default getdate()
+ModifiedDate datetime not null default getdate(),
+ComputedColumn as RecordID + SortOrder
 );
 go
 
@@ -156,6 +157,29 @@ select PersonId, FirstName + ' ' + LastName as [Name]
 from @PersonTableType
 order by PersonId;
 
+go
+
+-- For Data Comparison
+
+drop table if exists dbo.DataCompare;
+
+create table dbo.DataCompare (
+RecordId int not null identity(1,1) primary key,
+ModifiedDate datetime not null,
+DisplayName varchar(50) not null,
+SortOrder int not null
+);
+
+set identity_insert dbo.DataCompare on;
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
+values (1, getdate(), 'ModifiedRecord', 1);
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
+values (2, getdate(), 'NewRecord', 2);
+
+set identity_insert dbo.DataCompare off;
+
+exec sys.sp_addextendedproperty @name=N'IsReferenceTable', @value=N'TRUE' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DataCompare'
 go
 
 

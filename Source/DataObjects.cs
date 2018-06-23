@@ -51,4 +51,20 @@ namespace DatabaseCompare
             ObjectText = objectText;
         }
     }
+
+    public struct DataCompareConfiguration
+    {
+        public string SourceServerName;
+        public string SourceDatabaseName;
+        public string TargetServerName;
+        public string TargetDatabaseName;
+
+        public DataCompareConfiguration(string sourceServerName, string sourceDatabaseName, string targetServerName, string targetDatabaseName)
+        {
+            SourceServerName = sourceServerName;
+            SourceDatabaseName = sourceDatabaseName;
+            TargetServerName = targetServerName;
+            TargetDatabaseName = targetDatabaseName;
+        }
+    }
 }

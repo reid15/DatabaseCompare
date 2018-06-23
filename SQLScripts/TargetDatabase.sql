@@ -72,4 +72,27 @@ as
 begin
 	return 1;
 end
-go--
+go
+
+-- For Data Comparison
+
+drop table if exists dbo.DataCompare;
+
+create table dbo.DataCompare (
+RecordId int not null identity(1,1) primary key,
+ModifiedDate datetime not null,
+DisplayName varchar(50) not null,
+SortOrder int not null
+);
+
+set identity_insert dbo.DataCompare on;
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
+values (1, getdate(), 'ModifiedRecord', 0);
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
+values (3, getdate(), 'RecordToDelete', 3);
+
+set identity_insert dbo.DataCompare off;
+
+go

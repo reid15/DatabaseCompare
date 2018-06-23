@@ -11,6 +11,7 @@ namespace DatabaseCompare
         {
             InitializeComponent();
             GetConfigurationValues();
+            cboJobType.DataSource = JobType.GetJobTypeList();
         }
         
         private void btnGo_Click(object sender, EventArgs e)
@@ -21,9 +22,22 @@ namespace DatabaseCompare
                 Application.DoEvents();
                 Cursor.Current = Cursors.WaitCursor;
                 ValidateInput();
-                var schemaCompare = new SchemaCompare();
-                string result = schemaCompare.GetSchemaCompare(txtSourceServer.Text, txtSourceDatabase.Text, txtTargetServer.Text, txtTargetDatabase.Text);
-                txtResults.Text = result;
+                var jobSelection = (JobTypeEntry)cboJobType.SelectedValue;
+
+                switch (jobSelection.JobTypeId)
+                {
+                    case JobTypeEnum.SchemaCompare:
+                        var schemaCompare = new SchemaCompare();
+                        txtResults.Text = schemaCompare.GetSchemaCompare(txtSourceServer.Text, txtSourceDatabase.Text, txtTargetServer.Text, txtTargetDatabase.Text);
+                        break;
+                    case JobTypeEnum.DataCompare:
+                        var config = new DataCompareConfiguration(txtSourceServer.Text, txtSourceDatabase.Text, txtTargetServer.Text, txtTargetDatabase.Text);
+                        var dataCompare = new DataCompare();
+                        txtResults.Text = dataCompare.GetDataCompare(config);
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception exception)
             {
