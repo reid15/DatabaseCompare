@@ -19,21 +19,8 @@ namespace DatabaseCompare
         ForeignKey,
         Default,
         Check,
-        UserDefinedTableType
-    }
-
-    public struct TableSQL
-    {
-        public string CreateTableSQL;
-        public string ColumnSQL;
-        public string DropSQL;
-
-        public TableSQL(string createTableSQL, string columnSQL, string dropSQL)
-        {
-            CreateTableSQL = createTableSQL;
-            ColumnSQL = columnSQL;
-            DropSQL = dropSQL;
-        }
+        UserDefinedTableType,
+        PrimaryKey
     }
 
     public struct DatabaseObject
@@ -42,13 +29,15 @@ namespace DatabaseCompare
         public string SchemaName;
         public string ObjectName;
         public string ObjectText;
+        public string ParentObjectName;
 
-        public DatabaseObject(DatabaseObjectType databaseObjectType, string schemaName, string objectName, string objectText)
+        public DatabaseObject(DatabaseObjectType databaseObjectType, string schemaName, string objectName, string objectText, string parentObjectName = "")
         {
             DatabaseObjectType = databaseObjectType;
             SchemaName = schemaName;
             ObjectName = objectName;
             ObjectText = objectText;
+            ParentObjectName = parentObjectName;
         }
     }
 
@@ -67,4 +56,17 @@ namespace DatabaseCompare
             TargetDatabaseName = targetDatabaseName;
         }
     }
+
+    public struct CompareSQL
+    {
+        public string DropSQL;
+        public string CreateSQL;
+
+        public CompareSQL(string dropSQL, string createSQL)
+        {
+            DropSQL = dropSQL;
+            CreateSQL = createSQL;
+        }
+    }
+
 }

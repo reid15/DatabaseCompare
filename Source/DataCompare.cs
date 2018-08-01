@@ -32,6 +32,8 @@ namespace DatabaseCompare
             returnScript.AppendLine();
 
             returnScript.AppendLine(GetDataChanges(sourceDatabase));
+            returnScript.AppendLine();
+            returnScript.AppendLine("GO");
 
             return returnScript.ToString();
         }
@@ -127,12 +129,15 @@ namespace DatabaseCompare
         {
             var pkColumns = GetPrimaryKeyColumns(sourceTable);
             var returnSQL = new StringBuilder();
+            bool hasInsert = false;
+
             foreach (DataRow row in sourceDataTable.Rows)
             {
                 var targetRow = GetRowFromDataTable(targetDataTable, row, pkColumns);
                 if (targetRow == null)
                 {
                     returnSQL.AppendLine(ScriptInsert(row, sourceTable));
+                    hasInsert = true;
                 } else
                 {
                     string updateSQL = ScriptUpdate(row, targetRow, sourceTable);
@@ -152,6 +157,12 @@ namespace DatabaseCompare
                 }
             }
 
+            if (hasInsert && HasIdentityColumn(sourceTable))
+            {
+                string identityClause = "SET IDENTITY_INSERT " + sourceTable.Schema + "." + sourceTable.Name;
+                returnSQL.Insert(0, identityClause + " ON;" + Environment.NewLine + Environment.NewLine);
+                returnSQL.AppendLine(identityClause + " OFF;");
+            }
             return returnSQL.ToString();
         }
 
@@ -192,18 +203,59 @@ namespace DatabaseCompare
             Column column
         )
         {
-            if (data == null)
+            if (data == null || data == DBNull.Value)
             {
                 return "NULL";
             }
             string dataType = column.DataType.Name;
+            if (dataType == "bit")
+            {
+                if ((bool)data)
+                {
+                    return "1";
+                }
+                return "0";
+            }
+            if (dataType == "binary" || dataType == "varbinary")
+            {
+                var binaryArray = (byte[])data;
+                var returnString = new StringBuilder();
+                returnString.Append("0x");
+                foreach (var item in binaryArray)
+                {
+                    returnString.Append(item.ToString("X2"));
+                }
+                return returnString.ToString();
+            }
+            if (dataType == "datetime")
+            {
+                var dateData = (DateTime)data;
+                return "'" + dateData.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+            }
             string stringData = Convert.ToString(data);
-            if (dataType == "int")
+            if (IsNumericDataType(dataType))
             {
                 return stringData;
             } 
 
-            return "'" + stringData + "'";
+            return "'" + EscapeStringForSql(stringData) + "'";
+        }
+
+        private bool IsNumericDataType(string dataType)
+        {
+            if (dataType == "int" || dataType == "decimal" || dataType == "smallint" ||
+                dataType == "tinyint" || dataType == "numeric")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static string EscapeStringForSql(
+            string inputString
+        )
+        {
+            return inputString.Replace("'", "''");
         }
 
         private string ScriptInsert(
@@ -213,7 +265,8 @@ namespace DatabaseCompare
         {
             var returnSQL = new StringBuilder();
             var valuesList = new StringBuilder();
-            returnSQL.Append("insert into ");
+            
+            returnSQL.Append("INSERT INTO ");
             returnSQL.Append("[" + table.Schema + "].[" + table.Name + "](");
 
             bool firstColumn = true;
@@ -229,7 +282,7 @@ namespace DatabaseCompare
                 firstColumn = false;
             }
             returnSQL.AppendLine(")");
-            returnSQL.AppendLine("values (" + valuesList.ToString() + ");");
+            returnSQL.AppendLine("VALUES (" + valuesList.ToString() + ");");
 
             return returnSQL.ToString();
         }
@@ -240,30 +293,36 @@ namespace DatabaseCompare
             Table sourceTable
         )
         {
-            var returnSQL = new StringBuilder();
-
-            returnSQL.AppendLine("update [" + sourceTable.Schema + "].[" + sourceTable.Name + "] set");
+            var updateSQL = new StringBuilder();
 
             bool firstColumn = true;
             foreach (Column column in sourceTable.Columns)
             {
                 if (!column.InPrimaryKey)
                 {
-                    if (!sourceRow[column.Name].Equals(targetRow[column.Name]))
-                    {
+                    if (!IsEqual(sourceRow[column.Name], targetRow[column.Name]))
+                     {
                         if (!firstColumn)
                         {
-                            returnSQL.Append(", ");
+                            updateSQL.Append(", ");
                         }
 
-                        returnSQL.Append("[" + column.Name + "] = ");
-                        returnSQL.AppendLine(DelimitData(sourceRow[column.Name], column));
+                        updateSQL.Append("[" + column.Name + "] = ");
+                        updateSQL.AppendLine(DelimitData(sourceRow[column.Name], column));
                         firstColumn = false;
                     }
                 }
             }
 
-            returnSQL.AppendLine("where " + GetWhere(sourceRow, GetPrimaryKeyColumns(sourceTable)) + ";");
+            if (updateSQL.ToString().Length == 0)
+            {
+                return string.Empty;
+            }
+
+            var returnSQL = new StringBuilder();
+            returnSQL.AppendLine("UPDATE [" + sourceTable.Schema + "].[" + sourceTable.Name + "] SET");
+            returnSQL.Append(updateSQL.ToString());
+            returnSQL.AppendLine("WHERE " + GetWhere(sourceRow, GetPrimaryKeyColumns(sourceTable)) + ";");
 
             return returnSQL.ToString();
         }
@@ -274,12 +333,39 @@ namespace DatabaseCompare
         )
         {
             var returnSQL = new StringBuilder();
-            returnSQL.Append("delete from ");
+            returnSQL.Append("DELETE FROM ");
             returnSQL.AppendLine("[" + sourceTable.Schema + "].[" + sourceTable.Name + "]");
-            returnSQL.AppendLine("where " + GetWhere(row, GetPrimaryKeyColumns(sourceTable)) + ";");
+            returnSQL.AppendLine("WHERE " + GetWhere(row, GetPrimaryKeyColumns(sourceTable)) + ";");
 
             return returnSQL.ToString();
         }
-        
+
+        private bool HasIdentityColumn(
+            Table table
+        )
+        {
+            List<Column> columnList = new List<Column>();
+            foreach (Column column in table.Columns)
+            {
+                if (column.Identity)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsEqual(
+            object value1,
+            object value2
+        )
+        {
+            if(value1.GetType().Name == "Byte[]" && value1.GetType().Name == "Byte[]")
+            {
+                return (((Byte[])value1).SequenceEqual((Byte[])value1));
+            }
+            return Equals(value1, value2);
+        }
+
     }
 }

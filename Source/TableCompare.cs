@@ -6,7 +6,7 @@ namespace DatabaseCompare
 {
     public class TableCompare
     {
-        public TableSQL CompareTables(
+        public CompareSQL CompareTables(
             TableCollection sourceTables,
             TableCollection targetTables
         )
@@ -35,8 +35,8 @@ namespace DatabaseCompare
                     dropSQL.AppendLine("DROP TABLE IF EXISTS " + targetTable.Schema + "." + targetTable.Name + ";");
                 }
             }
-
-            return new TableSQL(tableSQL.ToString(), columnSQL.ToString(), dropSQL.ToString());
+            tableSQL.Append(columnSQL.ToString());
+            return new CompareSQL(dropSQL.ToString(), tableSQL.ToString());
         }
 
         private string CompareTable(

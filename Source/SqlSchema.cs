@@ -114,7 +114,8 @@ namespace DatabaseCompare
                     foreach (ForeignKey item in table.ForeignKeys)
                     {
                         string schemaName = ((Table)item.Parent).Schema;
-                        returnList.Add(new DatabaseObject(DatabaseObjectType.ForeignKey, schemaName, item.Name, ScriptObjects.ScriptForeignKey(item)));
+                        string tableName = ((Table)item.Parent).Name;
+                        returnList.Add(new DatabaseObject(DatabaseObjectType.ForeignKey, schemaName, item.Name, ScriptObjects.ScriptForeignKey(item), tableName));
                     }
                 }
             }
@@ -134,8 +135,36 @@ namespace DatabaseCompare
                 {
                     foreach (Index item in table.Indexes)
                     {
-                        string schemaName = ((Table)item.Parent).Schema;
-                        returnList.Add(new DatabaseObject(DatabaseObjectType.Index, schemaName, item.Name, ScriptObjects.ScriptIndex(item)));
+                        if (item.IndexKeyType != IndexKeyType.DriPrimaryKey)
+                        {
+                            string schemaName = ((Table)item.Parent).Schema;
+                            returnList.Add(new DatabaseObject(DatabaseObjectType.Index, schemaName, item.Name, ScriptObjects.ScriptIndex(item)));
+                        }
+                    }
+                }
+            }
+
+            return returnList;
+        }
+
+        public static List<DatabaseObject> GetPrimaryKeys(
+            Database database
+        )
+        {
+            var returnList = new List<DatabaseObject>();
+
+            foreach (Table table in database.Tables)
+            {
+                if (!table.IsSystemObject)
+                {
+                    foreach (Index item in table.Indexes)
+                    {
+                        if (item.IndexKeyType == IndexKeyType.DriPrimaryKey)
+                        {
+                            string schemaName = ((Table)item.Parent).Schema;
+                            string tableName = ((Table)item.Parent).Name;
+                            returnList.Add(new DatabaseObject(DatabaseObjectType.PrimaryKey, schemaName, item.Name, ScriptObjects.ScriptIndex(item), tableName));
+                        }
                     }
                 }
             }

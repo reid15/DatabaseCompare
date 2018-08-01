@@ -1,5 +1,12 @@
 
 -- Target Database
+-- Create objects for testing Data and Schema compare functions in the Database Compare program
+
+use master;
+
+if not exists(select * from sys.databases where name = 'TargetDatabase')
+	create database TargetDatabase;
+go
 
 use TargetDatabase;
 
@@ -79,19 +86,24 @@ go
 drop table if exists dbo.DataCompare;
 
 create table dbo.DataCompare (
-RecordId int not null identity(1,1) primary key,
+RecordId int not null identity(1,1) constraint PK_DataCompare primary key,
 ModifiedDate datetime not null,
 DisplayName varchar(50) not null,
-SortOrder int not null
+SortOrder int not null,
+IsActive bit not null,
+BinaryData varbinary(max) null
 );
 
 set identity_insert dbo.DataCompare on;
 
-insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
-values (1, getdate(), 'ModifiedRecord', 0);
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive) 
+values (1, getdate(), 'ModifiedRecord', 0, 1);
 
-insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
-values (3, getdate(), 'RecordToDelete', 3);
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive) 
+values (3, getdate(), 'RecordToDelete', 3, 1);
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive, BinaryData) 
+values (4, '2018-07-28 20:00:03', 'UnchangedRecord', 4, 1, 0x01e240);
 
 set identity_insert dbo.DataCompare off;
 

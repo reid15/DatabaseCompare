@@ -1,11 +1,20 @@
 
 -- Source Database
+-- Create objects for testing Data and Schema compare functions in the Database Compare program
+
+use master;
+
+if not exists(select * from sys.databases where name = 'SourceDatabase')
+	create database SourceDatabase;
+go
 
 use SourceDatabase;
 
 -- Cleanup
 drop table if exists dbo.TestTable1;
 drop table if exists schema2.TestTable2;
+drop procedure if exists dbo.GetPerson;
+drop type if exists PersonTableType;
 
 -- Create 2nd schema
 if not exists (select * from sys.schemas where [Name] = 'schema2')
@@ -17,14 +26,14 @@ go
 drop table if exists dbo.ReferenceTable;
 
 create table dbo.ReferenceTable(
-ReferenceId int not null primary key,
+ReferenceId int not null constraint PK_ReferenceTable primary key,
 ReferenceType varchar(20) not null
 );
 
 drop table if exists dbo.TestTable1;
 
 create table dbo.TestTable1(
-RecordId int not null identity(1,1) primary key,
+RecordId int not null identity(1,1) constraint PK_TestTable1 primary key,
 DisplayName varchar(50) not null check(len(DisplayName) > 0),
 SortOrder int not null unique,
 ReferenceId int null references dbo.ReferenceTable(ReferenceId),
@@ -52,7 +61,7 @@ go
 drop table if exists schema2.TestTable2;
 
 create table schema2.TestTable2(
-RecordId int not null identity(1,1) primary key,
+RecordId int not null identity(1,1),
 DisplayName varchar(50) not null,
 SortOrder int not null,
 ReferenceId int null references dbo.ReferenceTable(ReferenceId),
@@ -60,6 +69,8 @@ ModifiedDate datetime not null
 );
 
 go
+
+alter table schema2.TestTable2 add constraint PK_TestTable2 primary key clustered (RecordId);
 
 create index IX_TestTable2_ReferenceId on schema2.TestTable2(ReferenceId);
 
@@ -164,22 +175,30 @@ go
 drop table if exists dbo.DataCompare;
 
 create table dbo.DataCompare (
-RecordId int not null identity(1,1) primary key,
+RecordId int not null identity(1,1) constraint PK_DataCompare primary key,
 ModifiedDate datetime not null,
 DisplayName varchar(50) not null,
-SortOrder int not null
+SortOrder int not null,
+IsActive bit not null,
+BinaryData varbinary(max) null
 );
 
 set identity_insert dbo.DataCompare on;
 
-insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
-values (1, getdate(), 'ModifiedRecord', 1);
-insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder) 
-values (2, getdate(), 'NewRecord', 2);
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive) 
+values (1, '2018-07-28 20:00:01', 'ModifiedRecord', 1, 0);
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive, BinaryData) 
+values (2, '2018-07-28 20:00:02', 'NewRecord', 2, 1, 0x01e240);
+
+insert into dbo.DataCompare (RecordId, ModifiedDate, DisplayName, SortOrder, IsActive, BinaryData) 
+values (4, '2018-07-28 20:00:03', 'UnchangedRecord', 4, 1, 0x01e240);
 
 set identity_insert dbo.DataCompare off;
 
 exec sys.sp_addextendedproperty @name=N'IsReferenceTable', @value=N'TRUE' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DataCompare'
 go
+
+
 
 
