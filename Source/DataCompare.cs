@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.SqlServer.Management.Smo;
 
 namespace DatabaseCompare
@@ -81,8 +80,10 @@ namespace DatabaseCompare
         )
         {
             string sql = GetTableSQL(table);
-            var sourceData = DataAccess.GetDataTable(config.SourceServerName, config.SourceDatabaseName, sql);
-            var targetData = DataAccess.GetDataTable(config.TargetServerName, config.TargetDatabaseName, sql);
+            var sourceConnectionString = DatabaseCommon.DataAccess.GetConnectionString(config.SourceServerName, config.SourceDatabaseName);
+            var sourceData = DatabaseCommon.DataAccess.GetDataTable(sourceConnectionString, sql);
+            var targetConnectionString = DatabaseCommon.DataAccess.GetConnectionString(config.TargetServerName, config.TargetDatabaseName);
+            var targetData = DatabaseCommon.DataAccess.GetDataTable(targetConnectionString, sql);
 
             return CompareDataTables(sourceData, targetData, table);
         }
@@ -157,7 +158,7 @@ namespace DatabaseCompare
                 }
             }
 
-            if (hasInsert && HasIdentityColumn(sourceTable))
+            if (hasInsert && DatabaseCommon.DatabaseSchema.HasIdentityColumn(sourceTable))
             {
                 string identityClause = "SET IDENTITY_INSERT " + sourceTable.Schema + "." + sourceTable.Name;
                 returnSQL.Insert(0, identityClause + " ON;" + Environment.NewLine + Environment.NewLine);
@@ -193,69 +194,9 @@ namespace DatabaseCompare
                 {
                     where += "and ";
                 }
-                where += column.Name + " = " + DelimitData(dataRow[column.Name], column);
+                where += column.Name + " = " + DatabaseCommon.ScriptData.DelimitData(dataRow[column.Name], column);
             }
             return where;
-        }
-
-        private string DelimitData(
-            object data,
-            Column column
-        )
-        {
-            if (data == null || data == DBNull.Value)
-            {
-                return "NULL";
-            }
-            string dataType = column.DataType.Name;
-            if (dataType == "bit")
-            {
-                if ((bool)data)
-                {
-                    return "1";
-                }
-                return "0";
-            }
-            if (dataType == "binary" || dataType == "varbinary")
-            {
-                var binaryArray = (byte[])data;
-                var returnString = new StringBuilder();
-                returnString.Append("0x");
-                foreach (var item in binaryArray)
-                {
-                    returnString.Append(item.ToString("X2"));
-                }
-                return returnString.ToString();
-            }
-            if (dataType == "datetime")
-            {
-                var dateData = (DateTime)data;
-                return "'" + dateData.ToString("yyyy-MM-dd HH:mm:ss") + "'";
-            }
-            string stringData = Convert.ToString(data);
-            if (IsNumericDataType(dataType))
-            {
-                return stringData;
-            } 
-
-            return "'" + EscapeStringForSql(stringData) + "'";
-        }
-
-        private bool IsNumericDataType(string dataType)
-        {
-            if (dataType == "int" || dataType == "decimal" || dataType == "smallint" ||
-                dataType == "tinyint" || dataType == "numeric")
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private static string EscapeStringForSql(
-            string inputString
-        )
-        {
-            return inputString.Replace("'", "''");
         }
 
         private string ScriptInsert(
@@ -278,7 +219,7 @@ namespace DatabaseCompare
                     valuesList.Append(", ");
                 }
                 returnSQL.Append("[" + column.Name + "]");
-                valuesList.Append(DelimitData(dataRow[column.Name], column));
+                valuesList.Append(DatabaseCommon.ScriptData.DelimitData(dataRow[column.Name], column));
                 firstColumn = false;
             }
             returnSQL.AppendLine(")");
@@ -308,7 +249,7 @@ namespace DatabaseCompare
                         }
 
                         updateSQL.Append("[" + column.Name + "] = ");
-                        updateSQL.AppendLine(DelimitData(sourceRow[column.Name], column));
+                        updateSQL.AppendLine(DatabaseCommon.ScriptData.DelimitData(sourceRow[column.Name], column));
                         firstColumn = false;
                     }
                 }
@@ -338,21 +279,6 @@ namespace DatabaseCompare
             returnSQL.AppendLine("WHERE " + GetWhere(row, GetPrimaryKeyColumns(sourceTable)) + ";");
 
             return returnSQL.ToString();
-        }
-
-        private bool HasIdentityColumn(
-            Table table
-        )
-        {
-            List<Column> columnList = new List<Column>();
-            foreach (Column column in table.Columns)
-            {
-                if (column.Identity)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private bool IsEqual(

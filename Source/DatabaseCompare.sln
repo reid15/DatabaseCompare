@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseCompare", "DatabaseCompare.csproj", "{E6DA89D2-0FA4-483F-AB6D-96810E0FF546}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseCommon", "..\..\DatabaseCommon\DatabaseCommon.csproj", "{8F4DC15F-0F01-4A24-945D-338EB97D5970}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E6DA89D2-0FA4-483F-AB6D-96810E0FF546}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6DA89D2-0FA4-483F-AB6D-96810E0FF546}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6DA89D2-0FA4-483F-AB6D-96810E0FF546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F4DC15F-0F01-4A24-945D-338EB97D5970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4DC15F-0F01-4A24-945D-338EB97D5970}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4DC15F-0F01-4A24-945D-338EB97D5970}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4DC15F-0F01-4A24-945D-338EB97D5970}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

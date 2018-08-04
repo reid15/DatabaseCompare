@@ -184,16 +184,12 @@ namespace DatabaseCompare
             {
                 case DatabaseObjectType.StoredProcedure:
                     return "PROCEDURE";
-                    break;
                 case DatabaseObjectType.View:
                     return "VIEW";
-                    break;
                 case DatabaseObjectType.PrimaryKey:
                     return "CONSTRAINT";
-                    break;
                 case DatabaseObjectType.ForeignKey:
                     return "CONSTRAINT";
-                    break;
                 default:
                     throw new ApplicationException("GetObjectTypeName: Unhandled Type - " + objectType.ToString());
             }
