@@ -1,79 +1,9 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-*.suo
-.vs/DatabaseCompare/v15/Server/sqlite3/db.lock
-*.ide
-Source/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
-Source/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
-Source/bin/Debug/DatabaseCompare.exe
-Source/bin/Debug/DatabaseCompare.pdb
-Source/bin/Debug/Microsoft.SqlServer.ServiceBrokerEnum.dll
-Source/bin/Debug/Microsoft.SqlServer.Management.Sdk.Sfc.dll
-Source/bin/Debug/Microsoft.SqlServer.ConnectionInfo.dll
-Source/bin/Debug/Microsoft.SqlServer.Smo.dll
-Source/bin/Debug/Microsoft.SqlServer.SqlEnum.dll
-Source/bin/Debug/DatabaseCompare.exe.config
-Source/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
-Source/.vs/DatabaseCompare/DesignTimeBuild/.dtbcache
-*.ide-shm
-*.ide-wal
-Source/bin/Debug/DatabaseCommon.dll
-*.pdb
-*.ide-shm
-Source/.vs/DatabaseCompare/v15/Server/sqlite3/storage.ide-wal
-Source/bin/Debug/Microsoft.SqlServer.Diagnostics.STrace.dll
-Source/bin/Debug/Microsoft.SqlServer.Dmf.Common.dll
-Source/bin/Debug/Microsoft.SqlServer.SqlClrProvider.dll
-Source/bin/Debug/System.Net.Http.xml
-Source/bin/Debug/System.Net.Http.dll
-*.CopyComplete
+# Files to ignore
 *.cache
-Source/obj/Debug/DatabaseCompare.csproj.FileListAbsolute.txt
-Source/obj/Debug/DatabaseCompare.exe
-Source/obj/Debug/DatabaseCompare.frmDatabaseCompare.resources
-Source/obj/Debug/DatabaseCompare.Properties.Resources.resources
+*.lock
+*.pdb
+*.suo
+.vs/**
+Source/bin/**
+Source/obj/**
+Source/.vs/**
