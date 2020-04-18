@@ -1,0 +1,483 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.SqlServer.Management.SmoMetadataProvider</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Config.SmoInitFields">
+            <summary>
+            Defines initialization field list for different SMO object types. Each
+            configuration includes an optimized and safe field list.
+            Theoretically we could vary these fields per-engined type should the set of properties
+            not exist everywhere, but that set of properties is currently empty.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider">
+            <summary>
+            Represents an <see cref="T:Microsoft.SqlServer.Management.SqlParser.MetadataProvider.IMetadataProvider"/> object that uses SMO to retrieve
+            server metadata objects.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.ConnectedSmoMetadataProvider.BeforeBindHandler">
+            <summary>
+            Gets the method that will handle BeforeBind event.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.ConnectedSmoMetadataProvider.AfterBindHandler">
+            <summary>
+            Gets the method that will handle AfterBind event.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.DisconnectedSmoMetadataProvider.BeforeBindHandler">
+            <summary>
+            Gets the method that will handle BeforeBind event.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.DisconnectedSmoMetadataProvider.AfterBindHandler">
+            <summary>
+            Gets the method that will handle AfterBind event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.CreateConnectedProvider(Microsoft.SqlServer.Management.Common.ServerConnection)">
+            <summary>
+            Creates a new instance of the <see cref="N:Microsoft.SqlServer.Management.SqlParser.MetadataProvider"/> 
+            that uses the specified SMO connection to retrieve server metadata objects over the SMO.
+            </summary>
+            <param name="connection">A <see cref="T:Microsoft.SqlServer.Management.Common.ServerConnection"/> object that
+            is used to retrieve server metadata objects.</param>
+            <returns>A <see cref="T:Microsoft.SqlServer.Management.SmoMetaDataProvider.SmoMetadataProvider"/> object that 
+            uses the specified connection to retrive server metadata.</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.CreateConnectedProvider(Microsoft.SqlServer.Management.Common.ServerConnection,System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="N:Microsoft.SqlServer.Management.SqlParser.MetadataProvider"/> 
+            that uses the specified connection to retrieve server metadata objects over the SMO.
+            </summary>
+            <param name="connection">A <see cref="T:Microsoft.SqlServer.Management.Common.ServerConnection"/> object that
+            is used to retrieve server metadata objects.</param>
+            <param name="refreshDbListMillisecond">
+            An <see cref="T:System.Int32"/> value that specifies the time interval, in milliseconds, between database list refreshes.
+            The database refresh updates the list of accessible databases, basing this evaluation on whether the database is
+            on or offline, and whether the database is in single or multi-user mode.
+            </param>
+            <returns>A <see cref="T:Microsoft.SqlServer.Management.SmoMetaDataProvider.SmoMetadataProvider"/> object that 
+            uses the specified connection to retrive server metadata.</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.CreateDisconnectedProvider(Microsoft.SqlServer.Management.Smo.Server)">
+            <summary>
+            Creates a new instance of the <see cref="N:Microsoft.SqlServer.Management.SqlParser.MetadataProvider"/> 
+            that uses the specified SMO server object to retrieve metadata objects.
+            </summary>
+            <param name="server">A SMO <see cref="T:Microsoft.SqlServer.Management.Smo.Server"/> object that is used to retrieve 
+            metadata objects.</param>
+            <returns>A <see cref="T:Microsoft.SqlServer.Management.SmoMetaDataProvider.SmoMetadataProvider"/> object that 
+            uses the specified connection to retrive server metadata.</returns>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.Server">
+            <summary>
+            Gets an <see cref="T:Microsoft.SqlServer.Management.SqlParser.Metadata.IServer"/> object which allows for accessing server-side
+            metadata objects such as databases, schemas, and tables.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataProvider.SmoServer">
+            <summary>
+            Gets a <see cref="T:Microsoft.SqlServer.Management.Smo.Server"/> object associated with the metadata provider.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.ApplicationRoleCollectionHelper">
+            <summary>
+            ApplicationRoles
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.AsymmetricKeyCollectionHelper">
+            <summary>
+            AsymmetricKeys
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.CertificateCollectionHelper">
+            <summary>
+            Certificates
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.DatabaseRoleCollectionHelper">
+            <summary>
+            DatabaseRoles
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.SchemaCollectionHelper">
+            <summary>
+            Schemas
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserBasedSchemaCollectionHelper">
+            <summary>
+            Schemas for Shiloh, based on Users
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.RoleBasedSchemaCollectionHelper">
+            <summary>
+            Schemas for Shiloh, based on Users
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.DatabaseDdlTriggerCollectionHelper">
+            <summary>
+            Database DDL Triggers
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserCollectionHelper">
+            <summary>
+            Users
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.ArrayRange`1">
+            <summary>
+            This class represents a range of elements in an array.
+            </summary>
+            <typeparam name="T">Type of elements in the array.</typeparam>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.EmptyRange`1">
+            <summary>
+            This class represents an empty range of elements.
+            </summary>
+            <typeparam name="T">Type of elements in the array.</typeparam>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.MetadataList`2">
+            <summary>
+            This helper class retrieves a collection of SMO objects from the
+            database SMO object and provides retrieval of those object for
+            each schema in the database.
+            </summary>
+            <remarks>
+            This class relies on the assumption that objects in the collection
+            are order by schema name. If this is not true the per-schema grouping
+            will be incorrect.
+            This class copies all objects in the collection of objects specified to
+            a single-dimension array. It uses an internal lookup table that associate
+            a range of elements in the array to a schema name.
+            </remarks>
+            <typeparam name="T">Type of the SMO object to be retrieved.</typeparam>
+            <typeparam name="U">Type of the SMO collection that contains the objects.</typeparam>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.MetadataList`2.#ctor(`1,System.Int32,Microsoft.SqlServer.Management.SmoMetadataProvider.Database)">
+            <summary>
+            Constructs a new MetadataList object for the given collection
+            of SMO objects.
+            </summary>
+            <param name="smoCollection">Collection of SMO objects to be grouped by
+            their schema names.</param>
+            <param name="schemaCount">Number of schemas in the database.</param>
+            <param name="database">Database object the metadata belongs to.</param>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.MetadataList`2.Item(System.String)">
+            <summary>
+            Returns an iterator for SMO objects that belong to the specified
+            schema.
+            </summary>
+            <param name="schemaName">Name of the schema to get items for.</param>
+            <returns>An iterator of all objects the belong to the specified schema.</returns>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.TableMetadataList">
+            <summary>
+            This class represents a list of SMO Table objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.ViewMetadataList">
+            <summary>
+            This class represents a list of SMO View objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserDefinedFunctionMetadataList">
+            <summary>
+            This class represents a list of SMO user-defined function objects.
+            </summary>
+            <remarks>
+            This list includes both scalar-valued and table-valued functions.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserDefinedAggregateMetadataList">
+            <summary>
+            This class represents a list of SMO user-defined aggregate objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.StoredProcedureMetadataList">
+            <summary>
+            This class represents a list of SMO stored procedure objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.SynonymMetadataList">
+            <summary>
+            This class represents a list of SMO synonym objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.ExtendedStoredProcedureMetadataList">
+            <summary>
+            This class represents a list of SMO extended stored procedure objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserDefinedDataTypeMetadataList">
+            <summary>
+            This class represents a list of SMO user-defined data type objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserDefinedTableTypeMetadataList">
+            <summary>
+            This class represents a list of SMO user-defined table type objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Database.UserDefinedTypeMetadataList">
+            <summary>
+            This class represents a list of SMO user-defined type (CLR types) objects.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.DatabaseObjectBase.IMetadataList`1">
+            <summary>
+            Represents a list of SMO objects.
+            </summary>
+            <typeparam name="T">Type of SMO objects in the list.</typeparam>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.ISmoDatabaseObject">
+            <summary>
+            Represents an object associated with SMO database metadata object.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.ISmoDatabaseObject.SmoObject">
+            <summary>
+            Gets an <see cref="T:Microsoft.SqlServer.Management.Smo.SqlSmoObject"/> object associated with this object.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.ScalarValuedFunction.#ctor(Microsoft.SqlServer.Management.Smo.UserDefinedFunction,Microsoft.SqlServer.Management.SmoMetadataProvider.Schema)">
+            <summary>
+            Creates a new instance of ScalarValuedFunction using the specified metadata
+            object and that belongs to the specified schema.
+            </summary>
+            <param name="function">Underlying metadata object to be used by this object.</param>
+            <param name="schema">Parent schema object.</param>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.ExtendedStoredProcedureCollectionHelper">
+            <summary>
+            ExtendedStoredProcedure
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.ScalarValuedFunctionCollectionHelper">
+            <summary>
+            ScalarValuedFunction
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.StoredProcedureCollectionHelper">
+            <summary>
+            StoredProcedure
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.SynonymCollectionHelper">
+            <summary>
+            Synonym
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.TableCollectionHelper">
+            <summary>
+            Table
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.TableValuedFunctionCollectionHelper">
+            <summary>
+            TableValuedFunction
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.UserDefinedAggregateCollectionHelper">
+            <summary>
+            UserDefinedAggregate
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.UserDefinedClrTypeCollectionHelper">
+            <summary>
+            UserDefinedClrType
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.UserDefinedDataTypeCollectionHelper">
+            <summary>
+            UserDefinedDataType
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.UserDefinedTableTypeCollectionHelper">
+            <summary>
+            UserDefinedTableType
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Schema.ViewCollectionHelper">
+            <summary>
+            View
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Server.RefreshDatabaseList">
+            <summary>
+            Retrieves a snapshot of the server database list and updates its database
+            collection. This method checks for create, dropped and accessibility changed
+            databases.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Server.CredentialCollectionHelper">
+            <summary>
+            Credentials
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Server.LoginCollectionHelper">
+            <summary>
+            Logins
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Server.TriggerCollectionHelper">
+            <summary>
+            Triggers
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoBuiltInFunctionLookup.Instance">
+            <summary>
+            Gets singleton instance of the <see cref="T:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoBuiltInFunctionLookup"/> class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoCollationLookup.Instance">
+            <summary>
+            Gets singleton instance of the <see cref="T:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoCollationLookup"/> class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataFactory.Instance">
+            <summary>
+            Gets singleton instance of the <see cref="T:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoMetadataFactory"/> class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoSystemDataTypeLookup.Instance">
+            <summary>
+            Gets singleton instance of the <see cref="T:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoSystemDataTypeLookup"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoSystemDataTypeLookup.Find(Microsoft.SqlServer.Management.Smo.DataType)">
+            <summary>
+            Retrieves SystemDataType for a given SMO DataType object.
+            </summary>
+            <param name="smoDataType">SMO data type object to find and return SystemDataType for.</param>
+            <returns>DataType object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.SmoSystemDataTypeLookup.RetrieveSystemDataType(Microsoft.SqlServer.Management.Smo.UserDefinedDataType)">
+            <summary>
+            Retrieves and returns the base system data type for the specified 
+            user-defined data type (i.e. type alias).
+            </summary>
+            <param name="smoUserDefinedDataType">User-defined data type SMO metadata object.</param>
+            <returns>SystemDataType object if specified UDDT is valid; otherwise null.</returns>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.GetDataType(Microsoft.SqlServer.Management.SqlParser.Metadata.IDatabase,Microsoft.SqlServer.Management.Smo.DataType)">
+            <summary>
+            Retrieves data type object for a given metadata type.
+            </summary>
+            <param name="database">Database object to lookup UDT's.</param>
+            <param name="metadataType">Metadata type to get the data type for.</param>
+            <returns>Data type object if found; otherwise null.</returns>
+            <remarks>Null value schould never be returned. Caller schould ask for existing object</remarks>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.GetLogin(Microsoft.SqlServer.Management.SqlParser.Metadata.IServer,System.String)">
+            <summary>
+            Retrieves login object for a given name.
+            </summary>
+            <param name="server">Server object to lookup logins.</param>
+            <param name="loginName">Login name to get the Login for.</param>
+            <returns>Login object if found; otherwise null.</returns>
+            <remarks>Null value schould never be returned. Caller schould ask for existing object</remarks>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.GetSchema(Microsoft.SqlServer.Management.SqlParser.Metadata.IDatabase,System.String)">
+            <summary>
+            Retrieves and returns <see cref="T:Microsoft.SqlServer.Management.SqlParser.Metadata.ISchema"/> object for a given <see cref="T:Microsoft.SqlServer.Management.SqlParser.Metadata.IDatabase"/>
+            object and schema name.
+            </summary>
+            <param name="database">The database that contains the schema to search for.</param>
+            <param name="schemaName">Name of the schema to get.</param>
+            <returns>Schema object if found; otherwise null.</returns>
+            <remarks>Null value schould never be returned. Caller schould ask for existing schemas.</remarks>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.GetDatabase(Microsoft.SqlServer.Management.SqlParser.Metadata.IServer,System.String)">
+            <summary>
+            Retrieves and returns <see cref="T:Microsoft.SqlServer.Management.SqlParser.Metadata.IDatabase"/> object for a given <see cref="T:Microsoft.SqlServer.Management.SqlParser.Metadata.IServer"/>
+            object and database name.
+            </summary>
+            <param name="server">The server that contains the database to search for.</param>
+            <param name="databaseName">Name of the database to get.</param>
+            <returns>Database object if found; otherwise null.</returns>
+            <remarks>Null value schould never be returned. Caller schould ask for existing databases.</remarks>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.Module">
+            <summary>
+            Module specific utility methods.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.Module.GetDefinitionTest(Microsoft.SqlServer.Management.Smo.NamedSmoObject)">
+            <summary>
+            Retrieved the module definition text.
+            </summary>
+            <param name="module">Module smo object.</param>
+            <returns>Definition text.</returns>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.UserDefinedFunction">
+            <summary>
+            UserDefinedFunction specific utility methods.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.UserDefinedFunction.CreateParameterCollection(Microsoft.SqlServer.Management.SmoMetadataProvider.Database,Microsoft.SqlServer.Management.Smo.ParameterCollectionBase,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates a collection of BindInfo Parameter object from a given
+            metadata parameter collection.
+            </summary>
+            <param name="metadataCollection">Collection of metadata parameter objects.</param>
+            <param name="database">Database object that the table belongs to. 
+            This is needed for UDT retrieval.</param>
+            <param name="moduleInfo">Module information retrieved by the ParseUtils.</param>
+            <returns>
+            A collection of BindInfo parameter objects for that corresponds to the
+            given metadata parameter collection.
+            </returns>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.StoredProcedure">
+            <summary>
+            Stored procedure specific utility methods.
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.IndexCollectionHelper">
+            <summary>
+            Index
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.ColumnCollectionHelper">
+            <summary>
+            Column
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.ConstraintCollectionHelper">
+            <summary>
+            Index
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.ForeignKeyColumnCollectionHelper">
+            <summary>
+            ForeignKeyColumn
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.IndexedColumnCollectionHelper">
+            <summary>
+            IndexedColumn
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.StatisticsCollectionHelper">
+            <summary>
+            Statistics
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.StatisticsColumnCollectionHelper">
+            <summary>
+            StatisticsColumn
+            </summary>
+        </member>
+        <member name="T:Microsoft.SqlServer.Management.SmoMetadataProvider.Utils.DmlTriggerCollectionHelper">
+            <summary>
+            DmlTrigger
+            </summary>
+        </member>
+    </members>
+</doc>

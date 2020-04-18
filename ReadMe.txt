@@ -4,7 +4,7 @@ Overview:
 Compare SQL Server database schema or data to generate a SQL script to bring a Target database in sync with a Source database.
 
 Requirements:
-The program requires the .Net Framework 4.0 or later. 
+The program requires the .Net Framework 4.7.2 or later. 
 The SQL Server scripts generated will run on SQL Server 2016 or later. 
 Windows authentication is used. The user must have permission to view the objects and data that will be compared.
 The source code references the project in the DatabaseCommon repository.
