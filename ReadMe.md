@@ -24,7 +24,7 @@ Source Server: The SQL Server instance name for the Source database.\
 Source Database: The name of the Source database.\
 Target Server: The SQL Server instance name for the Target database.\
 Target Database: The name of the Target database.\
-Job Type: The comparison to run.
-A. Schema Compare: Compare the database objects (Tables, Views, Stored Procedures, etc). Create SQL to bring the Target database to match the Source database.
-B. Data Compare: Compare data in selected tables to bring the data in the Target database tables in sync with the Source database tables. The tables in the Source database that have an extended property IsReferenceTable with a value of TRUE will be the tables selected to compare.
+Job Type: The comparison to run.\
+A. Schema Compare: Compare the database objects (Tables, Views, Stored Procedures, etc). Create SQL to bring the Target database to match the Source database.\
+B. Data Compare: Compare data in selected tables to bring the data in the Target database tables in sync with the Source database tables. The tables in the Source database that have an extended property IsReferenceTable with a value of TRUE will be the tables selected to compare.\
 The DatabaseCompare.exe.config configuration file will store default values for the Server and Database names.
